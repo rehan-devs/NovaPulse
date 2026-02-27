@@ -142,7 +142,7 @@ export default function Hero() {
                         ].map((stat, i) => (
                           <div key={i} className="bg-white/[0.03] rounded-xl p-3 md:p-4 border border-white/[0.04]">
                             <div className="text-[10px] md:text-xs text-white/40 mb-1">{stat.label}</div>
-                            <div className="text-sm md:text-lg font-semibold text-white">{stat.value}</div>
+                            <div className="text-xs md:text-lg font-semibold text-white truncate">{stat.value}</div>
                             <div className="text-[10px] md:text-xs text-emerald-400 mt-0.5">{stat.change}</div>
                           </div>
                         ))}

@@ -117,12 +117,12 @@ export default function ProductShowcase() {
                     ].map((stat, i) => (
                       <div
                         key={i}
-                        className="bg-white/[0.02] rounded-xl p-4 border border-white/[0.04]"
+                        className="bg-white/[0.02] rounded-xl p-2.5 md:p-4 border border-white/[0.04]"
                       >
                         <div className="text-[11px] text-white/40 mb-2">
                           {stat.label}
                         </div>
-                        <div className="text-base md:text-xl font-bold text-white mb-1">
+                        <div className="text-xs md:text-xl font-bold text-white mb-1 truncate">{stat.value}
                           {stat.value}
                         </div>
                         <div
@@ -139,7 +139,7 @@ export default function ProductShowcase() {
                   </div>
 
                   {/* Main chart + sidebar */}
-                  <div className="grid grid-cols-12 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                     <div className="col-span-8 bg-white/[0.02] rounded-xl p-5 border border-white/[0.04]">
                       <div className="flex justify-between items-center mb-6">
                         <span className="text-sm font-medium text-white/70">
