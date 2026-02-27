@@ -47,6 +47,42 @@ const portfolioData = {
   }
 };
 
+const transactions = [
+  { 
+    name: "Netflix", 
+    amount: "-$15.99", 
+    positive: false,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-red-500">
+        <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.002-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z"/>
+      </svg>
+    )
+  },
+  { 
+    name: "Salary", 
+    amount: "+$4,200", 
+    positive: true,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full text-emerald-400">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M12 9v6M9 12h6"/>
+      </svg>
+    )
+  },
+  { 
+    name: "Groceries", 
+    amount: "-$127.50", 
+    positive: false,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full text-orange-400">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+    )
+  }
+];
+
 type PeriodKey = keyof typeof portfolioData;
 
 function StatPopup({
@@ -266,21 +302,21 @@ export default function Hero() {
                         {heroStats.map((stat, i) => (
                           <div
                             key={i}
-                            className="bg-white/[0.03] rounded-xl p-2 md:p-4 border border-white/[0.04] cursor-pointer md:cursor-default active:scale-[0.97] md:active:scale-100 transition-transform duration-150"
+                            className="bg-white/[0.03] rounded-xl p-2.5 md:p-4 border border-white/[0.04] cursor-pointer md:cursor-default active:scale-[0.97] md:active:scale-100 transition-transform duration-150"
                             onClick={() => {
                               if (window.innerWidth < 768) {
                                 setActiveStatPopup(i);
                               }
                             }}
                           >
-                            <div className="text-[8px] md:text-xs text-white/40 mb-0.5 md:mb-1 truncate">
+                            <div className="text-[9px] md:text-xs text-white/40 mb-0.5 md:mb-1 truncate">
                               {stat.label}
                             </div>
-                            <div className="text-[10px] md:text-lg font-semibold text-white truncate">
+                            <div className="text-[11px] md:text-lg font-semibold text-white truncate">
                               {stat.value}
                             </div>
                             <div className="flex items-center justify-between mt-0.5">
-                              <span className="text-[8px] md:text-xs text-emerald-400 truncate">
+                              <span className="text-[9px] md:text-xs text-emerald-400 truncate">
                                 {stat.change}
                               </span>
                               <span className="text-[7px] text-white/20 md:hidden">Tap</span>
@@ -370,27 +406,26 @@ export default function Hero() {
 
                       {/* Bottom row */}
                       <div className="grid grid-cols-2 gap-2 md:gap-4">
-                        <div className="bg-white/[0.02] rounded-xl p-2 md:p-4 border border-white/[0.04]">
-                          <div className="text-[8px] md:text-xs text-white/40 mb-1.5 md:mb-2">
+                        {/* Recent Transactions */}
+                        <div className="bg-white/[0.02] rounded-xl p-3 md:p-4 border border-white/[0.04]">
+                          <div className="text-[9px] md:text-xs text-white/40 mb-2 md:mb-3">
                             Recent Transactions
                           </div>
-                          <div className="space-y-1.5 md:space-y-2">
-                            {[
-                              { name: "Netflix", amount: "-$15.99" },
-                              { name: "Salary", amount: "+$4,200" },
-                              { name: "Groceries", amount: "-$127.50" }
-                            ].map((tx, i) => (
+                          <div className="space-y-2 md:space-y-3">
+                            {transactions.map((tx, i) => (
                               <div key={i} className="flex items-center justify-between">
-                                <div className="flex items-center gap-1.5 md:gap-2">
-                                  <div className="w-4 h-4 md:w-6 md:h-6 rounded-md bg-white/[0.06]" />
-                                  <span className="text-[8px] md:text-xs text-white/60 truncate">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <div className="w-7 h-7 md:w-9 md:h-9 rounded-lg bg-white/[0.06] p-1.5 md:p-2 flex items-center justify-center">
+                                    {tx.icon}
+                                  </div>
+                                  <span className="text-[10px] md:text-sm text-white/70 font-medium">
                                     {tx.name}
                                   </span>
                                 </div>
                                 <span
                                   className={cn(
-                                    "text-[8px] md:text-xs font-medium",
-                                    tx.amount.startsWith("+") ? "text-emerald-400" : "text-white/50"
+                                    "text-[10px] md:text-sm font-semibold",
+                                    tx.positive ? "text-emerald-400" : "text-white/60"
                                   )}
                                 >
                                   {tx.amount}
@@ -399,22 +434,24 @@ export default function Hero() {
                             ))}
                           </div>
                         </div>
-                        <div className="bg-white/[0.02] rounded-xl p-2 md:p-4 border border-white/[0.04]">
-                          <div className="text-[8px] md:text-xs text-white/40 mb-1.5 md:mb-2">
+
+                        {/* Savings Goals */}
+                        <div className="bg-white/[0.02] rounded-xl p-3 md:p-4 border border-white/[0.04]">
+                          <div className="text-[9px] md:text-xs text-white/40 mb-2 md:mb-3">
                             Savings Goals
                           </div>
-                          <div className="space-y-2 md:space-y-3">
+                          <div className="space-y-2.5 md:space-y-3">
                             {[
-                              { name: "Vacation", progress: 72 },
-                              { name: "Emergency", progress: 45 },
-                              { name: "New Car", progress: 28 }
+                              { name: "Vacation", progress: 72, amount: "$2,160" },
+                              { name: "Emergency", progress: 45, amount: "$4,500" },
+                              { name: "New Car", progress: 28, amount: "$5,600" }
                             ].map((goal, i) => (
-                              <div key={i} className="space-y-0.5 md:space-y-1">
+                              <div key={i} className="space-y-1">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-[8px] md:text-xs text-white/60">{goal.name}</span>
-                                  <span className="text-[8px] md:text-xs text-nova-accent">{goal.progress}%</span>
+                                  <span className="text-[9px] md:text-sm text-white/70 font-medium">{goal.name}</span>
+                                  <span className="text-[9px] md:text-xs text-nova-accent font-semibold">{goal.progress}%</span>
                                 </div>
-                                <div className="h-1 md:h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                                <div className="h-1.5 md:h-2 bg-white/[0.06] rounded-full overflow-hidden">
                                   <div
                                     className="h-full bg-gradient-to-r from-nova-accent to-nova-accent-purple rounded-full transition-all duration-700"
                                     style={{ width: `${goal.progress}%` }}

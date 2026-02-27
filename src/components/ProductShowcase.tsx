@@ -159,24 +159,27 @@ function SpendingChart({ period }: { period: PeriodKey }) {
   const maxValue = Math.max(...data.bars.map((d) => d.value));
 
   return (
-    <div className="flex items-end gap-1 md:gap-2 h-28 md:h-32 mt-2">
+    <div className="flex items-end gap-1 md:gap-2 h-24 md:h-32 mt-3">
       {data.bars.map((item, i) => {
         const heightPct = (item.value / maxValue) * 100;
         return (
           <div
             key={`${period}-${i}`}
-            className="flex-1 flex flex-col items-center gap-1 group cursor-pointer"
+            className="flex-1 flex flex-col items-center gap-1 group relative"
           >
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[8px] md:text-[10px] text-white font-medium bg-nova-card border border-white/[0.1] rounded px-1 py-0.5 whitespace-nowrap pointer-events-none absolute -top-6">
+            {/* Tooltip on hover */}
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[9px] md:text-[10px] text-white font-medium bg-nova-card border border-white/[0.1] rounded px-1.5 py-0.5 whitespace-nowrap pointer-events-none z-10">
               ${item.value.toLocaleString()}
             </div>
+            {/* Bar */}
             <div
-              className="w-full relative rounded-t-sm overflow-hidden transition-all duration-500 ease-out"
+              className="w-full relative rounded-t overflow-hidden transition-all duration-500 ease-out cursor-pointer"
               style={{ height: `${heightPct}%` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-nova-accent/40 to-nova-accent/70 group-hover:from-nova-accent/60 group-hover:to-nova-accent transition-all duration-200" />
+              <div className="absolute inset-0 bg-gradient-to-t from-nova-accent/50 to-nova-accent/80 group-hover:from-nova-accent/70 group-hover:to-nova-accent transition-all duration-200" />
             </div>
-            <span className="text-[6px] md:text-[9px] text-white/20 group-hover:text-white/50 transition-colors">
+            {/* Label */}
+            <span className="text-[7px] md:text-[10px] text-white/30 group-hover:text-white/60 transition-colors">
               {item.label}
             </span>
           </div>
@@ -296,19 +299,22 @@ export default function ProductShowcase() {
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4">
                     {/* Spending Chart */}
                     <div className="md:col-span-8 bg-white/[0.02] rounded-xl p-3 md:p-5 border border-white/[0.04]">
-                      <div className="flex justify-between items-start md:items-center mb-3 md:mb-4">
+                      <div className="flex justify-between items-start md:items-center mb-2">
                         <div>
                           <span className="text-[10px] md:text-sm font-medium text-white/70 block">
                             Spending Overview
                           </span>
                           <div className="flex items-baseline gap-1.5 md:gap-2 mt-1">
-                            <span className="text-sm md:text-2xl font-bold text-white">
+                            <span className="text-base md:text-2xl font-bold text-white">
                               {currentData.total}
+                            </span>
+                            <span className="text-[9px] md:text-xs text-white/40">
+                              total spent
                             </span>
                             <span
                               className={cn(
                                 "text-[9px] md:text-xs font-medium",
-                                currentData.change.startsWith("+") ? "text-emerald-400" : "text-red-400"
+                                currentData.change.startsWith("+") ? "text-red-400" : "text-emerald-400"
                               )}
                             >
                               {currentData.change}
@@ -321,7 +327,7 @@ export default function ProductShowcase() {
                               key={period}
                               onClick={() => setActivePeriod(period)}
                               className={cn(
-                                "text-[8px] md:text-xs px-1.5 md:px-3 py-0.5 md:py-1.5 rounded-md font-medium transition-all duration-200",
+                                "text-[8px] md:text-xs px-2 md:px-3 py-1 md:py-1.5 rounded-md font-medium transition-all duration-200",
                                 activePeriod === period
                                   ? "bg-nova-accent/20 text-nova-accent"
                                   : "text-white/30 hover:text-white/50"
