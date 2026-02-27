@@ -6,17 +6,145 @@ import { PlayIcon } from "./Icons";
 import GradientOrb from "./GradientOrb";
 import { cn } from "@/lib/utils";
 
+const heroStats = [
+  { label: "Total Balance", value: "$24,521.80", fullValue: "$24,521.80", change: "+12.5%", positive: true },
+  { label: "Monthly Savings", value: "$1,240.00", fullValue: "$1,240.00", change: "+8.3%", positive: true },
+  { label: "Investments", value: "$18,320.50", fullValue: "$18,320.50", change: "+15.2%", positive: true }
+];
+
+const portfolioData = {
+  "1W": {
+    points: "M0 80 C20 78, 40 75, 60 70 C80 72, 100 68, 120 65 C140 60, 160 62, 180 55 C200 50, 220 52, 240 48 C260 45, 280 42, 300 40 C320 38, 340 35, 360 32 C380 30, 400 28, 400 25",
+    fill: "M0 80 C20 78, 40 75, 60 70 C80 72, 100 68, 120 65 C140 60, 160 62, 180 55 C200 50, 220 52, 240 48 C260 45, 280 42, 300 40 C320 38, 340 35, 360 32 C380 30, 400 28, 400 25 L400 120 L0 120 Z",
+    endX: 400,
+    endY: 25,
+    change: "+2.4%",
+    value: "$18,758"
+  },
+  "1M": {
+    points: "M0 85 C20 80, 40 78, 60 72 C80 68, 100 70, 120 62 C140 55, 160 58, 180 48 C200 42, 220 45, 240 38 C260 30, 280 35, 300 28 C320 22, 340 25, 360 18 C380 15, 400 12, 400 8",
+    fill: "M0 85 C20 80, 40 78, 60 72 C80 68, 100 70, 120 62 C140 55, 160 58, 180 48 C200 42, 220 45, 240 38 C260 30, 280 35, 300 28 C320 22, 340 25, 360 18 C380 15, 400 12, 400 8 L400 120 L0 120 Z",
+    endX: 400,
+    endY: 8,
+    change: "+8.7%",
+    value: "$19,842"
+  },
+  "3M": {
+    points: "M0 90 C20 85, 40 80, 60 75 C80 70, 100 65, 120 55 C140 45, 160 50, 180 40 C200 30, 220 35, 240 25 C260 15, 280 20, 300 15 C320 10, 340 18, 360 8 C380 5, 400 3, 400 2",
+    fill: "M0 90 C20 85, 40 80, 60 75 C80 70, 100 65, 120 55 C140 45, 160 50, 180 40 C200 30, 220 35, 240 25 C260 15, 280 20, 300 15 C320 10, 340 18, 360 8 C380 5, 400 3, 400 2 L400 120 L0 120 Z",
+    endX: 400,
+    endY: 2,
+    change: "+15.2%",
+    value: "$21,156"
+  },
+  "1Y": {
+    points: "M0 100 C20 95, 40 88, 60 82 C80 78, 100 72, 120 65 C140 58, 160 52, 180 48 C200 42, 220 38, 240 32 C260 28, 280 22, 300 18 C320 14, 340 10, 360 8 C380 5, 400 3, 400 2",
+    fill: "M0 100 C20 95, 40 88, 60 82 C80 78, 100 72, 120 65 C140 58, 160 52, 180 48 C200 42, 220 38, 240 32 C260 28, 280 22, 300 18 C320 14, 340 10, 360 8 C380 5, 400 3, 400 2 L400 120 L0 120 Z",
+    endX: 400,
+    endY: 2,
+    change: "+42.8%",
+    value: "$24,521"
+  }
+};
+
+type PeriodKey = keyof typeof portfolioData;
+
+function StatPopup({
+  stat,
+  onClose
+}: {
+  stat: (typeof heroStats)[0];
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:hidden"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+      <div
+        className="relative bg-nova-card border border-white/[0.1] rounded-card-lg p-6 w-full max-w-[300px] shadow-card-hover animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.06] hover:bg-white/[0.1] transition-colors"
+          aria-label="Close"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="text-xs text-white/40 mb-1">{stat.label}</div>
+        <div className="text-[32px] font-bold text-white leading-tight mb-1">
+          {stat.fullValue}
+        </div>
+        <div
+          className={cn(
+            "text-sm font-medium inline-flex items-center gap-1",
+            stat.positive ? "text-emerald-400" : "text-red-400"
+          )}
+        >
+          {stat.positive ? (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M18 15l-6-6-6 6" />
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          )}
+          {stat.change}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-white/[0.06]">
+          <div className="text-[10px] text-white/30 mb-2">Last 7 days</div>
+          <svg className="w-full h-12" viewBox="0 0 200 40" fill="none" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id={`popup-fill-${stat.label.replace(/\s/g, "")}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#4A6CF7" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#4A6CF7" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id={`popup-line-${stat.label.replace(/\s/g, "")}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#4A6CF7" />
+                <stop offset="100%" stopColor="#7B61FF" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M0 30 C15 28, 30 25, 50 22 C70 19, 85 24, 100 18 C115 12, 135 15, 155 10 C175 7, 190 8, 200 5 L200 40 L0 40Z"
+              fill={`url(#popup-fill-${stat.label.replace(/\s/g, "")})`}
+            />
+            <path
+              d="M0 30 C15 28, 30 25, 50 22 C70 19, 85 24, 100 18 C115 12, 135 15, 155 10 C175 7, 190 8, 200 5"
+              stroke={`url(#popup-line-${stat.label.replace(/\s/g, "")})`}
+              strokeWidth="2"
+              fill="none"
+            />
+            <circle cx="200" cy="5" r="3" fill="#7B61FF" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activePeriod, setActivePeriod] = useState<PeriodKey>("3M");
+  const [activeStatPopup, setActiveStatPopup] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
+  const currentData = portfolioData[activePeriod];
+
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center pt-[120px] pb-20 overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center pt-[140px] pb-20 overflow-hidden"
       role="banner"
     >
       <div className="absolute inset-0 dot-grid opacity-30" aria-hidden="true" />
@@ -103,7 +231,7 @@ export default function Hero() {
                 </div>
 
                 {/* Dashboard content */}
-                <div className="p-6 md:p-8">
+                <div className="p-4 md:p-8">
                   <div className="grid grid-cols-12 gap-4 md:gap-6">
                     {/* Left sidebar */}
                     <div className="col-span-3 hidden md:flex flex-col gap-3">
@@ -134,82 +262,134 @@ export default function Hero() {
                     {/* Main content */}
                     <div className="col-span-12 md:col-span-9 space-y-4 md:space-y-6">
                       {/* Stats row */}
-                      <div className="grid grid-cols-3 gap-3 md:gap-4">
-                        {[
-                          { label: "Total Balance", value: "$24,521.80", change: "+12.5%" },
-                          { label: "Monthly Savings", value: "$1,240.00", change: "+8.3%" },
-                          { label: "Investments", value: "$18,320.50", change: "+15.2%" }
-                        ].map((stat, i) => (
-                          <div key={i} className="bg-white/[0.03] rounded-xl p-3 md:p-4 border border-white/[0.04]">
-                            <div className="text-[10px] md:text-xs text-white/40 mb-1">{stat.label}</div>
-                            <div className="text-xs md:text-lg font-semibold text-white truncate">{stat.value}</div>
-                            <div className="text-[10px] md:text-xs text-emerald-400 mt-0.5">{stat.change}</div>
+                      <div className="grid grid-cols-3 gap-2 md:gap-4">
+                        {heroStats.map((stat, i) => (
+                          <div
+                            key={i}
+                            className="bg-white/[0.03] rounded-xl p-2 md:p-4 border border-white/[0.04] cursor-pointer md:cursor-default active:scale-[0.97] md:active:scale-100 transition-transform duration-150"
+                            onClick={() => {
+                              if (window.innerWidth < 768) {
+                                setActiveStatPopup(i);
+                              }
+                            }}
+                          >
+                            <div className="text-[8px] md:text-xs text-white/40 mb-0.5 md:mb-1 truncate">
+                              {stat.label}
+                            </div>
+                            <div className="text-[10px] md:text-lg font-semibold text-white truncate">
+                              {stat.value}
+                            </div>
+                            <div className="flex items-center justify-between mt-0.5">
+                              <span className="text-[8px] md:text-xs text-emerald-400 truncate">
+                                {stat.change}
+                              </span>
+                              <span className="text-[7px] text-white/20 md:hidden">Tap</span>
+                            </div>
                           </div>
                         ))}
                       </div>
 
                       {/* Chart */}
-                      <div className="bg-white/[0.02] rounded-xl p-4 md:p-5 border border-white/[0.04]">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="text-xs md:text-sm font-medium text-white/70">Portfolio Growth</div>
-                          <div className="flex gap-2">
-                            {["1W", "1M", "3M", "1Y"].map((period, i) => (
-                              <div
+                      <div className="bg-white/[0.02] rounded-xl p-3 md:p-5 border border-white/[0.04]">
+                        <div className="flex items-center justify-between mb-2 md:mb-4">
+                          <div>
+                            <div className="text-xs md:text-sm font-medium text-white/70">
+                              Portfolio Growth
+                            </div>
+                            <div className="flex items-baseline gap-2 mt-1">
+                              <span className="text-base md:text-xl font-bold text-white">
+                                {currentData.value}
+                              </span>
+                              <span className="text-[10px] md:text-xs text-emerald-400 font-medium">
+                                {currentData.change}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex gap-1 bg-white/[0.03] rounded-lg p-0.5 md:p-1">
+                            {(Object.keys(portfolioData) as PeriodKey[]).map((period) => (
+                              <button
                                 key={period}
+                                onClick={() => setActivePeriod(period)}
                                 className={cn(
-                                  "px-2 py-0.5 rounded text-[10px] md:text-xs",
-                                  i === 2 ? "bg-nova-accent/20 text-nova-accent" : "text-white/30"
+                                  "text-[9px] md:text-xs px-1.5 md:px-2.5 py-0.5 md:py-1 rounded-md font-medium transition-all duration-200",
+                                  activePeriod === period
+                                    ? "bg-nova-accent/20 text-nova-accent"
+                                    : "text-white/30 hover:text-white/50"
                                 )}
                               >
                                 {period}
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>
-                        <svg className="w-full h-24 md:h-36" viewBox="0 0 400 120" fill="none" preserveAspectRatio="none">
+                        <svg
+                          className="w-full h-20 md:h-36"
+                          viewBox="0 0 400 120"
+                          fill="none"
+                          preserveAspectRatio="none"
+                        >
                           <defs>
-                            <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="heroChartFill" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="0%" stopColor="#4A6CF7" stopOpacity="0.3" />
                               <stop offset="100%" stopColor="#4A6CF7" stopOpacity="0" />
                             </linearGradient>
-                            <linearGradient id="heroLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <linearGradient id="heroChartLine" x1="0%" y1="0%" x2="100%" y2="0%">
                               <stop offset="0%" stopColor="#4A6CF7" />
                               <stop offset="100%" stopColor="#7B61FF" />
                             </linearGradient>
                           </defs>
                           <path
-                            d="M0 90 C20 85, 40 80, 60 75 C80 70, 100 65, 120 55 C140 45, 160 50, 180 40 C200 30, 220 35, 240 25 C260 15, 280 20, 300 15 C320 10, 340 18, 360 8 C380 5, 400 3, 400 2 L400 120 L0 120 Z"
-                            fill="url(#heroFill)"
+                            d={currentData.fill}
+                            fill="url(#heroChartFill)"
+                            className="transition-all duration-700 ease-out"
                           />
                           <path
-                            d="M0 90 C20 85, 40 80, 60 75 C80 70, 100 65, 120 55 C140 45, 160 50, 180 40 C200 30, 220 35, 240 25 C260 15, 280 20, 300 15 C320 10, 340 18, 360 8 C380 5, 400 3, 400 2"
-                            stroke="url(#heroLine)"
+                            d={currentData.points}
+                            stroke="url(#heroChartLine)"
                             strokeWidth="2"
                             fill="none"
+                            className="transition-all duration-700 ease-out"
                           />
-                          <circle cx="400" cy="2" r="4" fill="#7B61FF" />
-                          <circle cx="400" cy="2" r="8" fill="#7B61FF" fillOpacity="0.2" />
+                          <circle
+                            cx={currentData.endX}
+                            cy={currentData.endY}
+                            r="4"
+                            fill="#7B61FF"
+                            className="transition-all duration-700 ease-out"
+                          />
+                          <circle
+                            cx={currentData.endX}
+                            cy={currentData.endY}
+                            r="8"
+                            fill="#7B61FF"
+                            fillOpacity="0.2"
+                            className="transition-all duration-700 ease-out"
+                          />
                         </svg>
                       </div>
 
                       {/* Bottom row */}
-                      <div className="grid grid-cols-2 gap-3 md:gap-4">
-                        <div className="bg-white/[0.02] rounded-xl p-3 md:p-4 border border-white/[0.04]">
-                          <div className="text-[10px] md:text-xs text-white/40 mb-2">Recent Transactions</div>
-                          <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2 md:gap-4">
+                        <div className="bg-white/[0.02] rounded-xl p-2 md:p-4 border border-white/[0.04]">
+                          <div className="text-[8px] md:text-xs text-white/40 mb-1.5 md:mb-2">
+                            Recent Transactions
+                          </div>
+                          <div className="space-y-1.5 md:space-y-2">
                             {[
                               { name: "Netflix", amount: "-$15.99" },
                               { name: "Salary", amount: "+$4,200" },
                               { name: "Groceries", amount: "-$127.50" }
                             ].map((tx, i) => (
                               <div key={i} className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-6 h-6 rounded-md bg-white/[0.06]" />
-                                  <span className="text-[10px] md:text-xs text-white/60">{tx.name}</span>
+                                <div className="flex items-center gap-1.5 md:gap-2">
+                                  <div className="w-4 h-4 md:w-6 md:h-6 rounded-md bg-white/[0.06]" />
+                                  <span className="text-[8px] md:text-xs text-white/60 truncate">
+                                    {tx.name}
+                                  </span>
                                 </div>
                                 <span
                                   className={cn(
-                                    "text-[10px] md:text-xs font-medium",
+                                    "text-[8px] md:text-xs font-medium",
                                     tx.amount.startsWith("+") ? "text-emerald-400" : "text-white/50"
                                   )}
                                 >
@@ -219,22 +399,24 @@ export default function Hero() {
                             ))}
                           </div>
                         </div>
-                        <div className="bg-white/[0.02] rounded-xl p-3 md:p-4 border border-white/[0.04]">
-                          <div className="text-[10px] md:text-xs text-white/40 mb-2">Savings Goals</div>
-                          <div className="space-y-3">
+                        <div className="bg-white/[0.02] rounded-xl p-2 md:p-4 border border-white/[0.04]">
+                          <div className="text-[8px] md:text-xs text-white/40 mb-1.5 md:mb-2">
+                            Savings Goals
+                          </div>
+                          <div className="space-y-2 md:space-y-3">
                             {[
                               { name: "Vacation", progress: 72 },
                               { name: "Emergency", progress: 45 },
                               { name: "New Car", progress: 28 }
                             ].map((goal, i) => (
-                              <div key={i} className="space-y-1">
+                              <div key={i} className="space-y-0.5 md:space-y-1">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-[10px] md:text-xs text-white/60">{goal.name}</span>
-                                  <span className="text-[10px] md:text-xs text-nova-accent">{goal.progress}%</span>
+                                  <span className="text-[8px] md:text-xs text-white/60">{goal.name}</span>
+                                  <span className="text-[8px] md:text-xs text-nova-accent">{goal.progress}%</span>
                                 </div>
-                                <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                                <div className="h-1 md:h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
                                   <div
-                                    className="h-full bg-gradient-to-r from-nova-accent to-nova-accent-purple rounded-full"
+                                    className="h-full bg-gradient-to-r from-nova-accent to-nova-accent-purple rounded-full transition-all duration-700"
                                     style={{ width: `${goal.progress}%` }}
                                   />
                                 </div>
@@ -251,6 +433,14 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Stat Popup (Mobile Only) */}
+      {activeStatPopup !== null && (
+        <StatPopup
+          stat={heroStats[activeStatPopup]}
+          onClose={() => setActiveStatPopup(null)}
+        />
+      )}
     </section>
   );
 }
