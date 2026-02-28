@@ -413,7 +413,6 @@ export default function ProductShowcase() {
         </ScrollAnimator>
       </div>
 
-      {/* Stat Popup (Mobile Only) */}
       {activeStatPopup !== null && (
         <StatPopup
           stat={stats[activeStatPopup]}

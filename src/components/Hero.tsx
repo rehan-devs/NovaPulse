@@ -85,6 +85,73 @@ const transactions = [
 
 type PeriodKey = keyof typeof portfolioData;
 
+function WindowDots() {
+  const [hoveredDot, setHoveredDot] = useState<number | null>(null);
+
+  const dots = [
+    { color: "bg-[#FF5F57]", hoverColor: "bg-[#FF5F57]", icon: "×", label: "Close" },
+    { color: "bg-[#FEBC2E]", hoverColor: "bg-[#FEBC2E]", icon: "−", label: "Minimize" },
+    { color: "bg-[#28C840]", hoverColor: "bg-[#28C840]", icon: "⤢", label: "Fullscreen" }
+  ];
+
+  return (
+    <div className="flex gap-1.5 group/dots">
+      {dots.map((dot, i) => (
+        <div
+          key={i}
+          className="relative"
+          onMouseEnter={() => setHoveredDot(i)}
+          onMouseLeave={() => setHoveredDot(null)}
+        >
+          {/* Tooltip */}
+          <div
+            className={cn(
+              "absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#1a1a2e] border border-white/10 rounded text-[10px] text-white/70 whitespace-nowrap transition-all duration-200 pointer-events-none",
+              hoveredDot === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
+            )}
+          >
+            {dot.label}
+          </div>
+          
+          {/* Dot */}
+          <div
+            className={cn(
+              "w-3 h-3 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200",
+              dot.color,
+              hoveredDot === i && "scale-110 shadow-lg"
+            )}
+            style={{
+              boxShadow: hoveredDot === i ? `0 0 8px ${i === 0 ? '#FF5F57' : i === 1 ? '#FEBC2E' : '#28C840'}40` : 'none'
+            }}
+          >
+            {/* Icon on hover */}
+            <span
+              className={cn(
+                "text-[8px] font-bold text-black/60 transition-all duration-200 leading-none",
+                hoveredDot === i ? "opacity-100 scale-100" : "opacity-0 scale-50"
+              )}
+            >
+              {dot.icon}
+            </span>
+          </div>
+
+          {/* Ripple effect on hover */}
+          <div
+            className={cn(
+              "absolute inset-0 rounded-full transition-all duration-300 pointer-events-none",
+              hoveredDot === i ? "scale-150 opacity-0" : "scale-100 opacity-0"
+            )}
+            style={{
+              backgroundColor: i === 0 ? '#FF5F57' : i === 1 ? '#FEBC2E' : '#28C840',
+              animation: hoveredDot === i ? 'ping 0.5s ease-out' : 'none'
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function StatPopup({
   stat,
   onClose
@@ -252,18 +319,16 @@ export default function Hero() {
 
             <div className="relative animate-float">
               <div className="relative bg-nova-card rounded-card-lg border border-white/[0.08] overflow-hidden shadow-card-hover">
-                {/* Browser chrome */}
+                {/* Browser chrome with animated dots */}
                 <div className="flex items-center gap-2 px-4 py-3 bg-[#0E0E16] border-b border-white/[0.06]">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-                    <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
-                    <div className="w-3 h-3 rounded-full bg-[#28C840]" />
-                  </div>
+                  <WindowDots />
                   <div className="flex-1 flex justify-center">
                     <div className="w-60 h-6 bg-white/[0.04] rounded-md flex items-center justify-center">
                       <span className="text-[11px] text-white/30">app.novapulse.com</span>
                     </div>
                   </div>
+                  {/* Empty space to balance the dots */}
+                  <div className="w-[52px]" />
                 </div>
 
                 {/* Dashboard content */}
