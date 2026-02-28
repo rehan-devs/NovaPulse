@@ -89,13 +89,13 @@ function WindowDots() {
   const [hoveredDot, setHoveredDot] = useState<number | null>(null);
 
   const dots = [
-    { color: "bg-[#FF5F57]", hoverColor: "bg-[#FF5F57]", icon: "×", label: "Close" },
-    { color: "bg-[#FEBC2E]", hoverColor: "bg-[#FEBC2E]", icon: "−", label: "Minimize" },
-    { color: "bg-[#28C840]", hoverColor: "bg-[#28C840]", icon: "⤢", label: "Fullscreen" }
+    { color: "bg-[#FF5F57]", icon: "×", glowColor: "#FF5F57" },
+    { color: "bg-[#FEBC2E]", icon: "−", glowColor: "#FEBC2E" },
+    { color: "bg-[#28C840]", icon: "⤢", glowColor: "#28C840" }
   ];
 
   return (
-    <div className="flex gap-1.5 group/dots">
+    <div className="flex gap-1.5">
       {dots.map((dot, i) => (
         <div
           key={i}
@@ -103,28 +103,16 @@ function WindowDots() {
           onMouseEnter={() => setHoveredDot(i)}
           onMouseLeave={() => setHoveredDot(null)}
         >
-          {/* Tooltip */}
-          <div
-            className={cn(
-              "absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-[#1a1a2e] border border-white/10 rounded text-[10px] text-white/70 whitespace-nowrap transition-all duration-200 pointer-events-none",
-              hoveredDot === i ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
-            )}
-          >
-            {dot.label}
-          </div>
-          
-          {/* Dot */}
           <div
             className={cn(
               "w-3 h-3 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200",
               dot.color,
-              hoveredDot === i && "scale-110 shadow-lg"
+              hoveredDot === i && "scale-110"
             )}
             style={{
-              boxShadow: hoveredDot === i ? `0 0 8px ${i === 0 ? '#FF5F57' : i === 1 ? '#FEBC2E' : '#28C840'}40` : 'none'
+              boxShadow: hoveredDot === i ? `0 0 8px ${dot.glowColor}50` : 'none'
             }}
           >
-            {/* Icon on hover */}
             <span
               className={cn(
                 "text-[8px] font-bold text-black/60 transition-all duration-200 leading-none",
@@ -135,15 +123,14 @@ function WindowDots() {
             </span>
           </div>
 
-          {/* Ripple effect on hover */}
           <div
             className={cn(
-              "absolute inset-0 rounded-full transition-all duration-300 pointer-events-none",
-              hoveredDot === i ? "scale-150 opacity-0" : "scale-100 opacity-0"
+              "absolute inset-0 rounded-full pointer-events-none",
+              hoveredDot === i ? "animate-ping" : ""
             )}
             style={{
-              backgroundColor: i === 0 ? '#FF5F57' : i === 1 ? '#FEBC2E' : '#28C840',
-              animation: hoveredDot === i ? 'ping 0.5s ease-out' : 'none'
+              backgroundColor: dot.glowColor,
+              opacity: hoveredDot === i ? 0.3 : 0
             }}
           />
         </div>
