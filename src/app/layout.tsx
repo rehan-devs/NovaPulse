@@ -11,33 +11,24 @@ export const metadata: Metadata = {
     "automated savings",
     "investment autopilot",
     "fintech",
-    "money management",
+    "money management"
   ],
-  authors: [{ name: "NovaPulse" }],
-  openGraph: {
-    title: "NovaPulse — Your Money on Autopilot",
-    description:
-      "AI-powered personal finance that automates your savings, investments, and budgeting.",
-    type: "website",
-    url: "https://novapulse.com",
-    siteName: "NovaPulse",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "NovaPulse — Your Money on Autopilot",
-    description:
-      "AI-powered personal finance that automates your savings, investments, and budgeting.",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-icon.png',
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0A0A0F",
+  themeColor: "#0A0A0F"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
