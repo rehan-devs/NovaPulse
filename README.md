@@ -26,3 +26,4 @@ A premium, dark-themed landing page for NovaPulse, an AI-powered personal financ
 ```bash
 git clone https://github.com/yourusername/novapulse.git
 cd novapulse
+<!-- gitpulse:contribution index="1" timestamp="2026-05-17" -->
